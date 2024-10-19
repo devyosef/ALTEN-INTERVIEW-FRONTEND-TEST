@@ -1,18 +1,39 @@
 <h1 class="text-center">Liste des produits</h1>
 
-<p-button label="Créer produit" (onClick)="onCreate()" class="block text-center"/>
+<p-paginator [rows]="itemsPerPage" [totalRecords]="filteredData.length" (onPageChange)="onPageChange($event)"/>
 
-<p-dataView #dv [value]="products()">
+<div class="product-list-search-create">
+    <p-button label="Créer produit" (onClick)="onCreate()" class="block"/>
+    <input type="text" pInputText [(ngModel)]="searchTerm" placeholder="Type product name..."  (input)="filterList()"/>
+</div>
+<p-dataView #dv [value]="paginatedData">
     <ng-template pTemplate="list" let-products>
-        @for (product of products; track product) {
+        <p-toast />
+        @for (product of paginatedData; track product) {
             <p-card class="block mb-2">
-                <span class="font-medium text-secondary text-sm">{{ product.category }}</span>
-                <div class="text-lg font-medium text-900 mt-2">{{ product.name }}</div>
+                <div class="product-category-reference">
+                    <span class="font-medium text-secondary text-sm">{{ product.category }}</span>
+                    <span class="font-medium text-secondary text-sm">{{ product.internalReference }}</span>
+                    <input type="number" min="1" placeholder="Quantity" [(ngModel)]="quantities[product.code]"/>
+                    <span><i class="pi pi-cart-plus product-cart" (click)="addToCart(product.code, product.price)"></i></span>
+                </div>
 
+                <div class="text-lg font-medium text-900 mt-2">{{ product.name }}</div>
+                <small>{{ product.description }}</small>
+                <div class="product-price"><strong>{{ product.price }} €</strong></div>
+                <div  class="product-stock-status" [ngStyle]="{ 'background-color': getInventoryStatusColor(product.inventoryStatus) }" >{{ product.inventoryStatus }}</div>
                 <ng-template pTemplate="footer">
-                    <div class="flex gap-3 mt-1">
-                        <p-button label="Modifier" severity="secondary" (onClick)="onUpdate(product)"/>
-                        <p-button label="Supprimer" severity="danger" (onClick)="onDelete(product)" />
+                    <div style="display: flex; justify-content: space-between;">
+                        <div class="flex gap-3 mt-1">
+                            <p-button label="Modifier" severity="secondary" (onClick)="onUpdate(product)"/>
+                            <p-button label="Supprimer" severity="danger" (onClick)="onDelete(product)" />
+                        </div>
+                        <div>
+                            Review: 
+                            @for (i of [].constructor(product.rating); track i) {
+                                <i class="pi pi-star-fill product-rating"></i>
+                            }
+                        </div>
                     </div>
                 </ng-template>
             </p-card>
