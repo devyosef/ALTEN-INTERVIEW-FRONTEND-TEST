@@ -1,0 +1,38 @@
+<div>
+    <h1 class="block text-center"><strong>Contact Form</strong></h1>
+    <form [formGroup]="contactForm" (ngSubmit)="submit()">
+        <div class="card flex justify-content-center input-margin flex-column form-container">
+            <p-messages [(value)]="feedback" [hidden]="!isSubmitted" [closable]="false"/>
+            <div class="flex flex-column gap-2 input-margin">
+                <label for="email">Email</label>
+                <input 
+                    formControlName="email"
+                    pInputText
+                    id="email" 
+                   />
+                @if (f.email.touched && f.email.invalid) {
+                    <small class="error-message" id="error-email" [hidden]="!f.email.errors?.required">
+                        Email est obligatoire
+                    </small>
+                    <small class="error-message" id="error-email" [hidden]="!f.email.errors?.pattern">
+                        Email invalide
+                    </small>
+                }
+            </div>
+
+            <div class="flex flex-column input-margin">
+                <textarea rows="5" cols="30" pInputTextarea formControlName="message" (input)="onMessageInput()"></textarea>
+                <small style="text-align: end;">{{ messageLength }}/300</small>
+                @if (f.message.touched && f.message.invalid) {
+                    <small class="error-message" id="error-message-required" [hidden]="!f.message.errors?.required">
+                        Message est obligatoire
+                    </small>    
+                    <small class="error-message" id="error-message-maxLength" [hidden]="!f.message.errors?.maxlength">
+                        Message ne doit pas dépasser 300 caractères
+                    </small>
+                }
+            </div>
+            <p-button label="Envoyer" type="submit" [disabled]="!contactForm.valid" />
+        </div>
+    </form>
+</div>

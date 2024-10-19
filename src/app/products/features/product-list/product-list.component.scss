@@ -3,3 +3,32 @@
     height: 100%;
     overflow: auto;
 }
+
+.product-price {
+    font-size: 25px;
+    padding: 6px 0px;
+    margin-bottom: 10px;
+}
+.product-category-reference {
+    display: flex;
+    justify-content: space-between;
+}
+.product-rating {
+    color: yellow;
+}
+.product-stock-status {
+    padding: 10px;
+    background-color: orange;
+    display: inline;
+    border-radius: 20px;
+    color: white;
+}
+.product-cart {
+    cursor: pointer;
+    font-size: 20px;
+}
+.product-list-search-create {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+}
